@@ -1,87 +1,73 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
 
 # Configuración de la página
-st.set_page_config(page_title="Aprende Machine Learning", layout="wide")
+st.set_page_config(page_title="Teoría de Machine Learning", layout="wide")
 
 st.title("Introducción al Desarrollo y Despliegue de Modelos de Machine Learning")
 st.markdown("Autor: Dr. Jesús Andrés Arzola Flores[cite: 1]")
-st.write("Esta aplicación interactiva te guiará a través de los conceptos fundamentales, una actividad práctica y una evaluación para consolidar tu aprendizaje.")
+st.write("Esta aplicación está diseñada exclusivamente para explorar los conceptos teóricos fundamentales del aprendizaje automático.")
 
-st.sidebar.header("Navegación")
-seccion = st.sidebar.radio("Ir a:", ["1. Conceptos Básicos", "2. Actividad Práctica", "3. Evaluación y Retroalimentación"])
+# Menú de navegación lateral
+st.sidebar.header("Índice Teórico")
+seccion = st.sidebar.radio(
+    "Selecciona un tema para aprender:",
+    [
+        "1. ¿Qué es el Machine Learning?",
+        "2. Tipos de Aprendizaje",
+        "3. Flujo de Desarrollo de un Modelo",
+        "4. Despliegue de Modelos"
+    ]
+)
 
-if seccion == "1. Conceptos Básicos":
-    st.header("Conceptos Básicos de Machine Learning")
+if seccion == "1. ¿Qué es el Machine Learning?":
+    st.header("1. ¿Qué es el Machine Learning?")
     st.write("""
-    El **Machine Learning (Aprendizaje Automático)** permite a las computadoras aprender de los datos sin ser programadas explícitamente para cada tarea. 
+    El **Machine Learning (Aprendizaje Automático)** es una rama de la Inteligencia Artificial (IA) que se enfoca en el desarrollo de sistemas capaces de aprender y mejorar a partir de los datos, sin ser programados explícitamente para cada tarea.
     
-    *   **Datos de Entrenamiento:** El conjunto de ejemplos (con sus respuestas o etiquetas) que se utiliza para enseñar al modelo.
-    *   **Datos de Prueba:** Un subconjunto de datos que el modelo nunca ha visto, utilizado para evaluar qué tan bien generaliza.
-    *   **Algoritmo:** Las matemáticas y la lógica subyacente (ej. Regresión Logística, Random Forest) que extraen patrones de los datos.
-    *   **Despliegue:** El proceso de integrar un modelo entrenado en un entorno de producción (como esta misma aplicación en Streamlit) para que pueda realizar predicciones sobre datos nuevos.
+    A diferencia de la programación tradicional, donde se ingresan datos y reglas para obtener respuestas, en Machine Learning se ingresan datos y respuestas para que el algoritmo descubra las reglas.
     """)
-    st.info("💡 Explora la siguiente sección para ver cómo estos conceptos se aplican en código en tiempo real.")
+    st.info("💡 **Ejemplo:** En lugar de escribir reglas complejas para identificar correos spam, le mostramos al modelo miles de correos etiquetados como 'spam' o 'no spam' para que aprenda a distinguirlos por sí mismo.")
 
-elif seccion == "2. Actividad Práctica":
-    st.header("Entrenamiento Interactivo de un Modelo")
-    st.write("Ajusta los parámetros para entrenar un modelo de clasificación usando un conjunto de datos sintético y observa cómo cambia el rendimiento.")
+elif seccion == "2. Tipos de Aprendizaje":
+    st.header("2. Tipos de Aprendizaje Automático")
+    st.write("Los modelos de Machine Learning se clasifican principalmente por cómo aprenden de los datos:")
     
-    # Generar datos sintéticos
-    np.random.seed(42)
-    X = np.random.rand(200, 2)
-    y = (X[:, 0] + X[:, 1] > 1).astype(int)
+    st.subheader("Aprendizaje Supervisado")
+    st.write("El algoritmo aprende de datos de entrenamiento que ya están etiquetados con la respuesta correcta. Su objetivo es mapear una entrada a una salida predecible.")
+    st.write("- *Ejemplo:* Predecir el precio de una casa basado en su tamaño y ubicación (Regresión) o identificar si una imagen contiene un perro o un gato (Clasificación).")
     
-    col1, col2 = st.columns(2)
-    with col1:
-        test_size = st.slider("Porcentaje de Datos de Prueba", min_value=0.1, max_value=0.5, value=0.2, step=0.05)
-        n_estimators = st.slider("Número de Árboles (Random Forest)", min_value=1, max_value=100, value=10, step=1)
-        
-    with col2:
-        st.write("### Resultados del Entrenamiento")
-        if st.button("Entrenar Modelo"):
-            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
-            
-            modelo = RandomForestClassifier(n_estimators=n_estimators, random_state=42)
-            modelo.fit(X_train, y_train)
-            predicciones = modelo.predict(X_test)
-            
-            precision = accuracy_score(y_test, predicciones)
-            st.success(f"Modelo entrenado exitosamente.")
-            st.metric(label="Precisión (Accuracy) en Datos de Prueba", value=f"{precision * 100:.2f}%")
-            st.write(f"- Datos de entrenamiento: {len(X_train)} muestras")
-            st.write(f"- Datos de prueba: {len(X_test)} muestras")
+    st.subheader("Aprendizaje No Supervisado")
+    st.write("El modelo recibe datos sin etiquetas y debe encontrar patrones, estructuras o agrupaciones ocultas por su cuenta.")
+    st.write("- *Ejemplo:* Segmentar clientes en diferentes grupos para marketing basado en sus hábitos de compra (Clustering).")
+    
+    st.subheader("Aprendizaje por Refuerzo")
+    st.write("Un 'agente' aprende a tomar decisiones interactuando con un entorno, recibiendo recompensas por acciones correctas y penalizaciones por las incorrectas.")
+    st.write("- *Ejemplo:* Entrenar a una inteligencia artificial para jugar ajedrez o conducir un auto autónomo.")
 
-elif seccion == "3. Evaluación y Retroalimentación":
-    st.header("Pon a prueba tu conocimiento")
-    st.write("Responde las siguientes preguntas para evaluar tu comprensión de los conceptos de Machine Learning.")
+elif seccion == "3. Flujo de Desarrollo de un Modelo":
+    st.header("3. Flujo de Desarrollo de un Modelo")
+    st.write("Desarrollar un modelo de Machine Learning es un proceso iterativo que consta de varios pasos clave:")
     
-    # Pregunta 1
-    st.subheader("Pregunta 1")
-    p1 = st.radio(
-        "¿Para qué se utilizan los 'Datos de Prueba' en Machine Learning?",
-        options=["Para enseñar al modelo los patrones iniciales.", "Para evaluar el rendimiento del modelo en datos no vistos.", "Para desplegar la aplicación en un servidor web."],
-        index=None
-    )
-    if p1:
-        if p1 == "Para evaluar el rendimiento del modelo en datos no vistos.":
-            st.success("¡Correcto! Los datos de prueba simulan situaciones reales para asegurar que el modelo no se haya memorizado simplemente las respuestas (sobreajuste).")
-        else:
-            st.error("Incorrecto. Recuerda que la evaluación requiere datos que el algoritmo no haya procesado durante su fase de aprendizaje.")
-            
-    # Pregunta 2
-    st.subheader("Pregunta 2")
-    p2 = st.radio(
-        "¿Qué representa el despliegue (deployment) de un modelo?",
-        options=["La división de la base de datos en conjuntos más pequeños.", "La integración del modelo en un entorno donde puede recibir nuevos datos y emitir predicciones.", "La limpieza de datos faltantes en el código Python."],
-        index=None
-    )
-    if p2:
-        if p2 == "La integración del modelo en un entorno donde puede recibir nuevos datos y emitir predicciones.":
-            st.success("¡Excelente! Desplegar un modelo (como hacerlo accesible mediante IALabs o Streamlit) es lo que le da valor práctico en el mundo real.")
-        else:
-            st.error("Incorrecto. El despliegue es la fase final del ciclo de vida, donde el modelo se pone 'en producción' para ser consumido por usuarios o sistemas.")
+    st.markdown("""
+    1. **Recopilación de Datos:** Obtener los datos sin procesar necesarios para resolver el problema.
+    2. **Limpieza y Preparación (Preprocesamiento):** Manejar valores nulos, normalizar variables y seleccionar las características (features) más importantes.
+    3. **División de Datos:** Separar el conjunto de datos en **Datos de Entrenamiento** (para enseñar al modelo) y **Datos de Prueba** (para evaluar su rendimiento).
+    4. **Entrenamiento del Modelo:** Aplicar el algoritmo seleccionado a los datos de entrenamiento para que ajuste sus parámetros internos.
+    5. **Evaluación:** Medir la eficacia del modelo utilizando los datos de prueba y métricas específicas (precisión, error cuadrático medio, etc.).
+    6. **Ajuste y Optimización:** Modificar hiperparámetros para mejorar los resultados obtenidos.
+    """)
+
+elif seccion == "4. Despliegue de Modelos":
+    st.header("4. Despliegue de Modelos (Deployment)")
+    st.write("""
+    El **Despliegue** es la etapa final y crucial donde el modelo entrenado se hace accesible para ser utilizado en el mundo real. 
+    Un modelo excelente no tiene valor si se queda en un cuaderno de experimentación (como Google Colab).
+    """)
+    
+    st.write("### Formas comunes de despliegue:")
+    st.markdown("""
+    * **Aplicaciones Web Interactivas:** Utilizando frameworks como **Streamlit** para crear interfaces gráficas rápidamente donde los usuarios pueden interactuar con el modelo.
+    * **APIs RESTful:** Exponer el modelo mediante servicios (usando Flask o FastAPI) para que otras aplicaciones, páginas web o software móviles envíen datos y reciban predicciones en tiempo real.
+    * **Despliegue en la Nube:** Alojar el modelo en plataformas en la nube para asegurar escalabilidad y disponibilidad continua.
+    """)
+    st.success("🎯 **Objetivo final:** Integrar la predicción generada por el Machine Learning en los procesos de toma de decisiones o en el producto final.")
